@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 [System.Serializable]
 public class CollisionResolver {
@@ -14,8 +13,6 @@ public class CollisionResolver {
 	[Range(0f, 180f)]
 	public float maxRicochetAngle = 120f;
 	public float randomRicochetAngle = 0.1f;
-	public bool pullRigidbodiesOnBounce = true; // Pull the objects when bounce
-	public float mass = 1f;                     // Simulated mass of the bullet when pulling
 
 	private int bounces = 0;
 	private Vector3 previousPos;
@@ -55,7 +52,7 @@ public class CollisionResolver {
 					bounces++;
 
 					// Bounce callback
-					OnBounce(hit.collider, hit.point);
+					bulletBehaviour.OnBulletCollision(hit, true);
 
 					// calculate the reflect direction
 					Vector3 reflectDirection = Vector3.Reflect(bulletBehaviour.GetTransform().forward, hit.normal);
@@ -83,8 +80,8 @@ public class CollisionResolver {
 					previousPos = bulletBehaviour.GetTransform().position;
 
 				} else {
-					Debug.Log("SELF HIT WTF");
 					//OnSelfHit(hit.collider, hit.point);
+					bulletBehaviour.OnBulletCollision(hit, false);
 				}
 			} // linecast
 
@@ -92,19 +89,4 @@ public class CollisionResolver {
 
 		previousPos = bulletBehaviour.GetTransform().position;
 	}
-
-	
-	public void OnBounce(Collider other, Vector3 hitPoint) {
-		// OnBounceStuff
-		PullRigidbodies(other, hitPoint);
-	}
-
-	private void PullRigidbodies(Collider other, Vector3 hitPoint) {
-		if (hit.rigidbody != null && pullRigidbodiesOnBounce) {
-			float ec = 0.5f * mass * Mathf.Pow(bulletKinematics.VelocityAtTime(
-				bulletBehaviour.GetTime()).magnitude, 2); // kinetic energy = 1/2*mass*v²
-			hit.rigidbody.AddForceAtPosition(ec * bulletBehaviour.GetTransform().forward, hitPoint);
-		}
-	}
-	
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class BulletBehaviour : MonoBehaviour {
 
@@ -7,7 +6,7 @@ public class BulletBehaviour : MonoBehaviour {
 	public bool debugTrajectory = true;
 
 	// Max trajectory time of the bullet
-	public float lifeTime = 3f;
+	public float lifeTime = 5f;
 
 	[System.Serializable]
 	public class KinematicProperties {
@@ -32,6 +31,7 @@ public class BulletBehaviour : MonoBehaviour {
 	}
 	public KinematicProperties kinematicProperties;
 	public CollisionResolver collisionResolver;
+	public PhysicalInteractor physicalInteractor;
 
 	BulletKinematics bulletKinematics;
 	private float _time;                // time elapsed since _isActive became true
@@ -44,6 +44,8 @@ public class BulletBehaviour : MonoBehaviour {
 
 		collisionResolver.Initiate(this, transform.position, bulletKinematics);
 
+		physicalInteractor.Initiate(this, bulletKinematics);
+
 		bulletKinematics.Initiate(
 			transform.position,
 			kinematicProperties.gravity,
@@ -52,6 +54,10 @@ public class BulletBehaviour : MonoBehaviour {
 			kinematicProperties.terminalVelocity,
 			kinematicProperties.rotationStiffness,
 			kinematicProperties.rotationDamping);
+	}
+	
+	public void OnBulletCollision(RaycastHit hit, bool canBounce) {
+		physicalInteractor.OnBulletCollision(hit, canBounce);
 	}
 
 	// Update the position, rotation and velocity for the current frame
@@ -79,12 +85,10 @@ public class BulletBehaviour : MonoBehaviour {
 	public void AdvanceTime(float deltaTime) {
 		_time += deltaTime;
 
-		/*
 		// Check for the remaining life time and recycle the bullet
 		if (_time > lifeTime) {
-			bulletPool.RecycleBullet(gameObject);
+			RemoveBullet(null); // no replacement
 		}
-		*/
 
 		// Update the position for the (new) current time
 		transform.position = bulletKinematics.PositionAtTime(_time);
@@ -105,5 +109,19 @@ public class BulletBehaviour : MonoBehaviour {
 		if (debugTrajectory)
 			bulletKinematics.DebugDrawLastTrajectory(_time, lifeTime);
 
+	}
+
+	public void RemoveBullet(GameObject replacement) {
+		// TODO: RECYCLE IN A BULLET POOL MAYBE?
+		if (replacement != null) {
+			GameObject go = (GameObject) Instantiate(replacement, bulletKinematics.PositionAtTime(_time - Time.deltaTime), transform.rotation);
+			go.GetComponent<Rigidbody>().velocity = bulletKinematics.VelocityAtTime(_time);
+		}
+
+		Destroy(gameObject);
+	}
+
+	public void InstantiateEffects(GameObject hitEffects, RaycastHit hit) {
+		Instantiate(hitEffects, hitEffects.transform.position, hitEffects.transform.rotation);
 	}
 }
