@@ -114,7 +114,11 @@ public class BulletBehaviour : MonoBehaviour {
 	public void RemoveBullet(GameObject replacement) {
 		// TODO: RECYCLE IN A BULLET POOL MAYBE?
 		if (replacement != null) {
-			GameObject go = (GameObject) Instantiate(replacement, bulletKinematics.PositionAtTime(_time - Time.deltaTime), transform.rotation);
+			GameObject go = (GameObject) Instantiate(
+				replacement, 
+				bulletKinematics.PositionAtTime(_time - Time.deltaTime), 
+				transform.rotation);
+			
 			go.GetComponent<Rigidbody>().velocity = bulletKinematics.VelocityAtTime(_time);
 		}
 
