@@ -126,6 +126,6 @@ public class BulletBehaviour : MonoBehaviour {
 	}
 
 	public void InstantiateEffects(GameObject hitEffects, RaycastHit hit) {
-		Instantiate(hitEffects, hitEffects.transform.position, hitEffects.transform.rotation);
+		Instantiate(hitEffects, hit.point, Quaternion.FromToRotation(hit.transform.up, hit.normal));
 	}
 }

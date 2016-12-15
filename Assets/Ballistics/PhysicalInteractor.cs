@@ -2,12 +2,13 @@ using UnityEngine;
 
 [System.Serializable]
 public class PhysicalInteractor {
-	public float mass = 1f;                     // Simulated mass of the bullet when pulling
+	public HitObjectGroup defaultInteraction;
 	public HitObjectGroup[] interactuableObjects;
 
 	[System.Serializable]
 	public class HitObjectGroup {
 		public string tag;                          // hit tag
+		public float collisionMass = 5f;            // Simulated mass of the bullet when pulling
 		public bool destroyOnHit = true;			// bullet will be destroyed when colliding
 		public bool pullRigidbodiesOnBounce = true; // pull the objects when bounce
 		public GameObject hitEffectsEnd;			// effects to instantiate when the bullet collides something
@@ -25,28 +26,17 @@ public class PhysicalInteractor {
 
 	public void OnBulletCollision(RaycastHit hit, bool canBounce) {
 
-		bool pullRigidbodiesOnBounce = false;
-		bool destroyOnHit = false;
 		GameObject hitEffects = null;
-		GameObject rigidReplacement = null;
-
-		foreach (HitObjectGroup hog in interactuableObjects) {
-			if (hit.collider.CompareTag(hog.tag)) {
-				pullRigidbodiesOnBounce = hog.pullRigidbodiesOnBounce;
-				destroyOnHit = hog.destroyOnHit;
-				rigidReplacement = hog.rigidReplacement;
-
-				if (canBounce) {
-					hitEffects = hog.hitEffectsBounce;
-				} else {
-					hitEffects = hog.hitEffectsEnd;
-				}
-			}
+		HitObjectGroup hitObject = getHitObjectProperties(hit);
+		if (canBounce) {
+			hitEffects = hitObject.hitEffectsBounce;
+		} else {
+			hitEffects = hitObject.hitEffectsEnd;
 		}
 
 		// pull rigidbodies on hit
-		if (pullRigidbodiesOnBounce) {
-			PullRigidbodies(hit);
+		if (hitObject.pullRigidbodiesOnBounce) {
+			PullRigidbodies(hit, hitObject.collisionMass);
 		}
 
 		// instantiate collision effects
@@ -55,12 +45,22 @@ public class PhysicalInteractor {
 		}
 
 		// we are not bouncing more, this is the last interaction
-		if (!canBounce || destroyOnHit) {
-			bulletBehaviour.RemoveBullet(rigidReplacement);
+		if (!canBounce || hitObject.destroyOnHit) {
+			bulletBehaviour.RemoveBullet(hitObject.rigidReplacement);
 		}
 	}
 
-	private void PullRigidbodies(RaycastHit hit) {
+	private HitObjectGroup getHitObjectProperties(RaycastHit hit) {
+		foreach (HitObjectGroup hog in interactuableObjects) {
+			if (hit.collider.CompareTag(hog.tag)) {
+				return hog;
+			}
+		}
+
+		return defaultInteraction;
+	}
+
+	private void PullRigidbodies(RaycastHit hit, float mass) {
 		if (hit.rigidbody == null) {
 			// no rigidbody
 			return;

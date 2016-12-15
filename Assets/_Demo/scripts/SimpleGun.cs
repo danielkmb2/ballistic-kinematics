@@ -10,11 +10,11 @@ public class SimpleGun : MonoBehaviour {
 	public Camera cam;
 
 	void Update() {
-		if (Input.GetKeyDown("mouse 0")) {
+		if (Input.GetKey("mouse 0")) {
 			GameObject bullet = GetRigidBullet(spawnpoint.transform.position, cam.transform.rotation);
 			ShotRigidBullet(bullet);
 		}
-		if (Input.GetKeyDown("mouse 1")) {
+		if (Input.GetKey("mouse 1")) {
 			GameObject bullet = GetBullet(spawnpoint.transform.position, cam.transform.rotation);
 			ShotBullet(bullet);
 		}

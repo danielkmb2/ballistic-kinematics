@@ -60,6 +60,7 @@ public class CollisionResolver {
 	}
 
 	private void doBounce() {
+
 		// Increment bounce count
 		bounces++;
 
