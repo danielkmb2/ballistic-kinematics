@@ -39,7 +39,7 @@ public class SimpleGun : MonoBehaviour {
 	}
 
 	private void ShotRigidBullet(GameObject bullet) {
-		bullet.GetComponent<Rigidbody>().velocity = spawnpoint.up * rigidBulletPower;
+		bullet.GetComponent<Rigidbody>().velocity = spawnpoint.forward * rigidBulletPower;
 	}
 
 	private GameObject GetBullet(Vector3 position, Quaternion rotation) {
@@ -52,6 +52,6 @@ public class SimpleGun : MonoBehaviour {
 			Instantiate(shotEffects, spawnpoint.position, spawnpoint.rotation);
 		}
 
-		bullet.GetComponent<BulletBehaviour>().StartTrajectory(spawnpoint.up * rigidBulletPower);
+		bullet.GetComponent<BulletBehaviour>().StartTrajectory(spawnpoint.forward * rigidBulletPower);
 	}
 }
