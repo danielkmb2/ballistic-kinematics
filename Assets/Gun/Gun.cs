@@ -25,20 +25,22 @@ public class Gun : MonoBehaviour {
 
 	public void fire(ShotProperties shotProperties) {
 		Debug.Log(shotProperties.bulletPrefab);
-		// instantiate bullet
-		GameObject bullet = (GameObject) Instantiate(
-			shotProperties.bulletPrefab, 
-			spawnPoint.transform.position, 
-			spawnPoint.transform.rotation);
 
-		Vector3 shotDirection = spawnPoint.forward;
-		shotDirection += new Vector3(
-			Random.Range(0, shotProperties.dispersionAngle),
-			Random.Range(-shotProperties.dispersionAngle / 2, shotProperties.dispersionAngle / 2),
-			Random.Range(-shotProperties.dispersionAngle / 2, shotProperties.dispersionAngle / 2));
+		for (int i = 0; i < shotProperties.shells; i++) {
+			// instantiate bullet
+			GameObject bullet = (GameObject)Instantiate(
+				shotProperties.bulletPrefab,
+				spawnPoint.transform.position,
+				spawnPoint.transform.rotation);
 
+			Vector3 shotDirection = spawnPoint.forward;
+			shotDirection += new Vector3(
+				Random.Range(0, shotProperties.dispersionAngle),
+				Random.Range(-shotProperties.dispersionAngle / 2, shotProperties.dispersionAngle / 2),
+				Random.Range(-shotProperties.dispersionAngle / 2, shotProperties.dispersionAngle / 2));
 
-		bullet.GetComponent<BulletBehaviour>().StartTrajectory(shotDirection * shotProperties.bulletInitialPower);
-
+			// set bulletbehaviour properties
+			bullet.GetComponent<BulletBehaviour>().StartTrajectory(shotDirection * shotProperties.bulletInitialPower);
+		}
 	}
 }
