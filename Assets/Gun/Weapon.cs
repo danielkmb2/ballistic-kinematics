@@ -56,12 +56,10 @@ public class Weapon {
 	}
 
 	private void doPrimaryFire() {
-		Debug.Log("PEW");
-
 		if (ammoProperties.isLoaded()) {
 			// calculate shot properties
 			GameObject bulletPrefab = ammoProperties.getBullet();
-			float dispersionAngle = dispersionProperties.getDispersionRate();
+			float dispersionAngle = dispersionProperties.getDispersionRate(shootingTime);
 			ShotProperties shotProperties = new ShotProperties(
 				bulletPrefab, bulletInitialPower, dispersionAngle, bulletsPerShot);
 			// notify to fire!

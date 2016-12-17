@@ -7,7 +7,9 @@ public class ShotDispersion {
 	public AnimationCurve scaleFunction;
 	public float dispersionTime = 2f;
 
-	public float getDispersionRate() {
-		return 0f;
+	public float getDispersionRate(float shootingTime) {
+		float normalizedDispersionTime = Mathf.Clamp(shootingTime, 0, dispersionTime) / dispersionTime;
+		float currentDispersion = scaleFunction.Evaluate(normalizedDispersionTime) * maxDispersion;
+		return currentDispersion;
 	}
 }
