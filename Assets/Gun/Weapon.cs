@@ -31,7 +31,7 @@ public class Weapon {
 
 	private void updateAmmoManager() {
 
-		if (!ammoManager.isReloading() && Input.GetKey(reloadKey)) {
+		if (!ammoManager.isReloading() && !ammoManager.chargerIsFull() && Input.GetKey(reloadKey)) {
 			ammoManager.reload();
 		}
 

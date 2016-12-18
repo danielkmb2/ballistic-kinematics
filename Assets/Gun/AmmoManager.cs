@@ -25,6 +25,10 @@ public class AmmoManager {
 		return reloading;
 	}
 
+	public bool chargerIsFull() {
+		return (remainingLoadedBullets == rounds);
+	}
+
 	public GameObject getBullet() {
 		if (isLoaded()) {
 			remainingLoadedBullets--;
