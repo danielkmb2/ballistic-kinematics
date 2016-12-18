@@ -6,7 +6,7 @@ public class AmmoManager {
 	public int ammo = 100;
 	public int rounds = 20;				// 0 means infinite
 	public float reloadTime = 2f;
-	public AnimationClip reloadAnimation;
+	public string reloadAnimation;
 	public GameObject reloadEffects;
 
 	public int remainingLoadedBullets = 0;
