@@ -3,9 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class Weapon {
 	public string name;
-	public KeyCode selectionKey;
-	public KeyCode primaryFireButton = KeyCode.Mouse0;
 	public KeyCode reloadKey;
+	public KeyCode primaryFireButton = KeyCode.Mouse0;
 	public float bulletInitialPower = 30f;
 	public float fireRate = 1f;
 	public int bulletsPerShot = 1;

@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour {
 
+	public KeyCode nextWeapon = KeyCode.PageUp;
+	public KeyCode previousWeapon = KeyCode.PageDown;
 	public Transform spawnPoint;
 	public Weapon[] weapons;
 
-	private Weapon activeWeapon;
+	private int activeWeapon = 0;
 	Animation animationComponent;
 
 	void Start() {
@@ -16,15 +18,29 @@ public class Gun : MonoBehaviour {
 		foreach (Weapon weapon in this.weapons) {
 			weapon.initiate(this);
 		}
-
-		// use the first weapon by default
-		if (weapons.Length > 0) {
-			activeWeapon = weapons[0];
-		}
 	}
 
 	void Update() {
-		activeWeapon.update();
+		manageWeaponSelection();
+		weapons[activeWeapon].update();
+	}
+
+	private void manageWeaponSelection() {
+		if (Input.GetKeyDown(nextWeapon)) {
+			if (activeWeapon == weapons.Length - 1) {
+				activeWeapon = 0;
+			} else {
+				activeWeapon++;
+			}
+		}
+
+		if (Input.GetKeyDown(previousWeapon)) {
+			if (activeWeapon == 0) {
+				activeWeapon = weapons.Length - 1;
+			} else {
+				activeWeapon--;
+			}
+		}
 	}
 
 	public void fire(ShotProperties shotProperties) {
