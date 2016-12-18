@@ -11,7 +11,7 @@ public class Weapon {
 	public bool automatic = false;
 	public ShotDispersion dispersionProperties;
 	public ShotEffects shotEffects;
-	public AmmoManager ammoProperties;
+	public AmmoManager ammoManager;
 
 	private float lastShotTime = 0f;
 	private float shootingTime = 0f;
@@ -21,12 +21,23 @@ public class Weapon {
 
 	public void initiate(Gun gun) {
 		this.mainGun = gun;
+		ammoManager.initiate();
 	}
 
 	public void update() {
 		fireOperations();
-		// reload?
-		// things...
+		updateAmmoManager();
+	}
+
+	private void updateAmmoManager() {
+
+		if (!ammoManager.isReloading() && Input.GetKey(reloadKey)) {
+			ammoManager.reload();
+		}
+
+		if (!ammoManager.isLoaded()) {
+			ammoManager.update();
+		}
 	}
 
 	private void fireOperations() {
@@ -63,9 +74,10 @@ public class Weapon {
 	}
 
 	private void doPrimaryFire() {
-		if (ammoProperties.isLoaded()) {
+		GameObject bulletPrefab = ammoManager.getBullet();
+
+		if (bulletPrefab != null) {
 			// calculate shot properties
-			GameObject bulletPrefab = ammoProperties.getBullet();
 			ShotProperties shotProperties = new ShotProperties(
 				bulletPrefab, bulletInitialPower, _currentDispersionAngle, bulletsPerShot,
 				shotEffects.effects, shotEffects.recoilAnimation);
@@ -74,6 +86,7 @@ public class Weapon {
 
 		} else {
 			// TODO: we need to reload. can we reload?
+			ammoManager.reload();
 		}
 	}
 }

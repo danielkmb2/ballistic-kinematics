@@ -44,7 +44,6 @@ public class Gun : MonoBehaviour {
 	}
 
 	public void fire(ShotProperties shotProperties) {
-		Debug.Log(shotProperties.bulletPrefab);
 
 		for (int i = 0; i < shotProperties.shells; i++) {
 			// instantiate bullet
@@ -64,10 +63,7 @@ public class Gun : MonoBehaviour {
 		}
 
 		if (shotProperties.effects != null) {
-			GameObject bullet = (GameObject)Instantiate(
-	shotProperties.effects,
-	spawnPoint.transform.position,
-	spawnPoint.transform.rotation);
+			Instantiate(shotProperties.effects,	spawnPoint.transform.position, spawnPoint.transform.rotation);
 		}
 
 		if (shotProperties.recoilAnimation != null) {
