@@ -21,7 +21,7 @@ public class Weapon {
 
 	public void initiate(Gun gun) {
 		this.mainGun = gun;
-		ammoManager.initiate();
+		ammoManager.initiate(mainGun);
 	}
 
 	public void update() {
@@ -30,8 +30,8 @@ public class Weapon {
 	}
 
 	private void updateAmmoManager() {
-
-		if (!ammoManager.isReloading() && !ammoManager.chargerIsFull() && Input.GetKey(reloadKey)) {
+		if (ammoManager.bulletsRemaining() && !ammoManager.isReloading() &&
+			!ammoManager.chargerIsFull() && Input.GetKey(reloadKey)) {
 			ammoManager.reload();
 		}
 
@@ -86,7 +86,9 @@ public class Weapon {
 
 		} else {
 			// TODO: we need to reload. can we reload?
-			ammoManager.reload();
+			if (ammoManager.bulletsRemaining() && !ammoManager.isReloading() && !ammoManager.chargerIsFull()) {
+				ammoManager.reload();
+			}
 		}
 	}
 }

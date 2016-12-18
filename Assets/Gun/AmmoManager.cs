@@ -12,9 +12,11 @@ public class AmmoManager {
 	public int remainingLoadedBullets = 0;
 	private bool reloading = false;
 	private float reloadingStart = 0f;
+	private Gun mainGun;
 
-	public void initiate() {
+	public void initiate(Gun gun) {
 		remainingLoadedBullets = rounds;
+		this.mainGun = gun;
 	}
 
 	public bool isLoaded() {
@@ -35,13 +37,14 @@ public class AmmoManager {
 			return bulletPrefab;
 		} else {
 			// we need to reload. 
-			Debug.Log("No more bullets. We need to reload");
+			Debug.Log("No more loaded bullets.");
 			return null;
 		}
 	}
 
 	public void reload() {
 		if (!reloading) {
+			mainGun.playReloadEffects(new ReloadEffects(reloadAnimation, reloadEffects));
 			reloading = true;
 			reloadingStart = Time.time;
 		} else {
@@ -62,5 +65,19 @@ public class AmmoManager {
 			ammo = ammo - takenBullets;
 			remainingLoadedBullets = takenBullets;
 		}
+	}
+
+	public bool bulletsRemaining() {
+		return (isLoaded() || ammo > 0);
+	}
+}
+
+public class ReloadEffects {
+	public string reloadAnimation;
+	public GameObject reloadEffects;
+
+	public ReloadEffects(string reloadAnimation, GameObject reloadEffects) {
+		this.reloadEffects = reloadEffects;
+		this.reloadAnimation = reloadAnimation;
 	}
 }

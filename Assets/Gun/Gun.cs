@@ -66,9 +66,20 @@ public class Gun : MonoBehaviour {
 			Instantiate(shotProperties.effects,	spawnPoint.transform.position, spawnPoint.transform.rotation);
 		}
 
-		if (shotProperties.recoilAnimation != null) {
+		if (shotProperties.recoilAnimation != null && !"".Equals(shotProperties.recoilAnimation)) {
 			animationComponent.Stop();
 			animationComponent.Play(shotProperties.recoilAnimation);
+		}
+	}
+
+	public void playReloadEffects(ReloadEffects reloadEffects) {
+		if (reloadEffects.reloadEffects != null) {
+			Instantiate(reloadEffects.reloadEffects, spawnPoint.transform.position, spawnPoint.transform.rotation);
+		}
+
+		if (reloadEffects.reloadAnimation != null && !"".Equals(reloadEffects.reloadAnimation)) {
+			animationComponent.Stop();
+			animationComponent.Play(reloadEffects.reloadAnimation);
 		}
 	}
 }
