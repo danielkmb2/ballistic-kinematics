@@ -68,7 +68,8 @@ public class Weapon {
 			// calculate shot properties
 			GameObject bulletPrefab = ammoProperties.getBullet();
 			ShotProperties shotProperties = new ShotProperties(
-				bulletPrefab, bulletInitialPower, _currentDispersionAngle, bulletsPerShot);
+				bulletPrefab, bulletInitialPower, _currentDispersionAngle, bulletsPerShot,
+				shotEffects.effects, shotEffects.recoilAnimation);
 			// notify to fire!
 			mainGun.fire(shotProperties);
 
@@ -84,11 +85,17 @@ public class ShotProperties {
 	public float dispersionAngle;
 	public int shells;
 
+	public GameObject effects;
+	public string recoilAnimation;
+
 	public ShotProperties(GameObject bulletPrefab, float bulletInitialPower, 
-							float dispersionAngle, int shells) {
+							float dispersionAngle, int shells, GameObject effects,
+							string recoilAnimation) {
 		this.bulletPrefab = bulletPrefab;
 		this.bulletInitialPower = bulletInitialPower;
 		this.dispersionAngle = dispersionAngle;
 		this.shells = shells;
+		this.effects = effects;
+		this.recoilAnimation = recoilAnimation;
 	}
 }

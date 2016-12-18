@@ -6,8 +6,12 @@ public class Gun : MonoBehaviour {
 	public Weapon[] weapons;
 
 	private Weapon activeWeapon;
+	Animation animationComponent;
 
 	void Start() {
+
+		animationComponent = GetComponent<Animation>();
+
 		// initiate weapons
 		foreach (Weapon weapon in this.weapons) {
 			weapon.initiate(this);
@@ -41,6 +45,18 @@ public class Gun : MonoBehaviour {
 
 			// set bulletbehaviour properties
 			bullet.GetComponent<BulletBehaviour>().StartTrajectory(shotDirection * shotProperties.bulletInitialPower);
+		}
+
+		if (shotProperties.effects != null) {
+			GameObject bullet = (GameObject)Instantiate(
+	shotProperties.effects,
+	spawnPoint.transform.position,
+	spawnPoint.transform.rotation);
+		}
+
+		if (shotProperties.recoilAnimation != null) {
+			animationComponent.Stop();
+			animationComponent.Play(shotProperties.recoilAnimation);
 		}
 	}
 }
