@@ -16,7 +16,9 @@ public class Weapon {
 
 	private float lastShotTime = 0f;
 	private float shootingTime = 0f;
+	private float notShootingTime = 0f;
 	private Gun mainGun;
+	private float _currentDispersionAngle = 0f;
 
 	public void initiate(Gun gun) {
 		this.mainGun = gun;
@@ -32,9 +34,15 @@ public class Weapon {
 		// update the shooting time
 		if (Input.GetKey(primaryFireButton)) {
 			shootingTime += Time.deltaTime;
+			notShootingTime = 0f;
 		} else {
+			notShootingTime += Time.deltaTime;
 			shootingTime = 0f;
 		}
+
+		// update the dispersion rate
+		_currentDispersionAngle = dispersionProperties.getDispersionRate(
+			shootingTime, Input.GetKey(primaryFireButton));
 
 		// update shot
 		if (automatic) {
@@ -59,9 +67,8 @@ public class Weapon {
 		if (ammoProperties.isLoaded()) {
 			// calculate shot properties
 			GameObject bulletPrefab = ammoProperties.getBullet();
-			float dispersionAngle = dispersionProperties.getDispersionRate(shootingTime);
 			ShotProperties shotProperties = new ShotProperties(
-				bulletPrefab, bulletInitialPower, dispersionAngle, bulletsPerShot);
+				bulletPrefab, bulletInitialPower, _currentDispersionAngle, bulletsPerShot);
 			// notify to fire!
 			mainGun.fire(shotProperties);
 

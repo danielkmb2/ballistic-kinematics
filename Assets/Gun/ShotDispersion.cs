@@ -4,18 +4,32 @@ using UnityEngine;
 public class ShotDispersion {
 	public float minDispersion = 0f;
 	public float maxDispersion = 0.1f;
-	public AnimationCurve scaleFunction;
-	public float dispersionTime = 2f;
+	public float increaseDispersionRate = 1f;
+	public float decreaseDispersionRate = 2f;
 
-	public float getDispersionRate(float shootingTime) {
+	private float _lastDispersion = 0f;
 
-		if (dispersionTime == 0) {
-			// avoid get divided by zero and die
-			return maxDispersion;
+	public float getDispersionRate(float shootingTime, bool keyPressed) {
+
+		// calculate current dispersion
+		float currentDispersion = 0f;
+		if (shootingTime == 0) {
+			currentDispersion = Mathf.Lerp(_lastDispersion, minDispersion, Time.deltaTime * decreaseDispersionRate);
+		} else {
+			currentDispersion = Mathf.Lerp(_lastDispersion, maxDispersion, Time.deltaTime * increaseDispersionRate);
 		}
 
-		float normalizedDispersionTime = Mathf.Clamp(shootingTime, 0, dispersionTime) / dispersionTime;
-		float currentDispersion = scaleFunction.Evaluate(normalizedDispersionTime) * maxDispersion;
+		// clamp decimal aproximations
+		if (!keyPressed && currentDispersion < minDispersion + 0.01f) {
+			currentDispersion = minDispersion;
+		}
+
+		if (keyPressed && currentDispersion > maxDispersion - 0.01f) {
+			currentDispersion = maxDispersion;
+		}
+
+		// store and return
+		_lastDispersion = currentDispersion;
 		return currentDispersion;
 	}
 }
