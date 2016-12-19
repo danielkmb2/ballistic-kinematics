@@ -1,4 +1,4 @@
-# ballistics
+# Ballistic kinematics
 Ballistic trajectory simulation system for Unity3D.
 
 What you can find in this repository is a generic implementation of ballistic trajectories, and the whole infrastructure to use it.
