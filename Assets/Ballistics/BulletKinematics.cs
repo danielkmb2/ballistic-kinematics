@@ -19,7 +19,12 @@ public class BulletKinematics {
 
 		float gravityLength = gravity.magnitude;
 		k = 0.5f * gravityLength / terminalVelocity;
-		vInfinity = gravity * (terminalVelocity / gravityLength) + windVelocity;
+
+		if (gravity == Vector3.zero) { // avoid dividing by zero
+			vInfinity = Vector3.zero;
+		} else {
+			vInfinity = gravity * (terminalVelocity / gravityLength) + windVelocity;
+		}
 
 		velocity = initialVelocity;
 		v0 = velocity;
