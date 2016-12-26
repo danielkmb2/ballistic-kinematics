@@ -3,6 +3,8 @@ using UnityEngine;
 [System.Serializable]
 public class AmmoManager {
 	public GameObject bulletPrefab;
+	public bool infiniteAmmo = false;
+	public bool infiniteRounds = false;
 	public int ammo = 100;
 	public int rounds = 20;				// 0 means infinite
 	public float reloadTime = 2f;
@@ -20,7 +22,7 @@ public class AmmoManager {
 	}
 
 	public bool isLoaded() {
-		return (remainingLoadedBullets > 0) && !reloading;
+		return ((remainingLoadedBullets > 0) && !reloading) || infiniteRounds;
 	}
 
 	public bool isReloading() {
@@ -28,13 +30,25 @@ public class AmmoManager {
 	}
 
 	public bool chargerIsFull() {
-		return (remainingLoadedBullets == rounds);
+		return (remainingLoadedBullets == rounds) || infiniteRounds;
 	}
 
 	public GameObject getBullet() {
+
 		if (isLoaded()) {
-			remainingLoadedBullets--;
-			return bulletPrefab;
+			if (!infiniteRounds) {
+				remainingLoadedBullets--;
+				return bulletPrefab;
+			} else if (!infiniteAmmo && ammo > 0) {
+				ammo--;
+				return bulletPrefab;
+			} else if (infiniteAmmo && infiniteRounds) {
+				return bulletPrefab;
+			} else {
+				// wtf
+				Debug.Log("wtf");
+				return null;
+			}
 		} else {
 			// we need to reload. 
 			Debug.Log("No more loaded bullets.");
@@ -56,14 +70,19 @@ public class AmmoManager {
 		if (reloading && (Time.time > reloadTime + reloadingStart)) {
 			reloading = false;
 			int takenBullets = 0;
+
 			if (ammo >= rounds) {
 				takenBullets = rounds;
 			} else {
 				takenBullets = ammo;
 			}
 
-			ammo = ammo - takenBullets;
-			remainingLoadedBullets = takenBullets;
+			if (infiniteAmmo) {
+				remainingLoadedBullets = takenBullets;
+			} else {
+				ammo = ammo - takenBullets;
+				remainingLoadedBullets = takenBullets;
+			}
 		}
 	}
 
