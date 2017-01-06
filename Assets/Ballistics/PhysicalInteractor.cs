@@ -13,7 +13,7 @@ public class PhysicalInteractor {
 		public bool pullRigidbodiesOnBounce = true; // pull the objects when bounce
 		public GameObject hitEffectsEnd;			// effects to instantiate when the bullet collides something
 		public GameObject hitEffectsBounce;         // effects to instantiate when the bullet collides something and bounces
-		public GameObject rigidReplacement;			// rigid object to replace the bullet when trajectory is destroyed
+		public string rigidReplacement;				// rigid object to replace the bullet when trajectory is destroyed
 	}
 
 	private BulletBehaviour bulletBehaviour;

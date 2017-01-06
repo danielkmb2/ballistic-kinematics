@@ -113,14 +113,13 @@ public class BulletBehaviour : MonoBehaviour {
 
 	}
 
-	public void RemoveBullet(GameObject replacement) {
+	public void RemoveBullet(string replacementHash) {
 		// TODO: RECYCLE IN A BULLET POOL MAYBE?
-		if (replacement != null) {
-			GameObject go = (GameObject) Instantiate(
-				replacement, 
-				bulletKinematics.PositionAtTime(_time - Time.deltaTime), 
-				transform.rotation);
-			
+		if (replacementHash != null) {
+			GameObject go = PoolManager.getInstance().getObject(replacementHash);
+			go.GetComponent<ReturnToPoolOverTime> ().reset ();
+			go.transform.position = bulletKinematics.PositionAtTime(_time - Time.deltaTime);
+			go.transform.rotation = transform.rotation;
 			go.GetComponent<Rigidbody>().velocity = bulletKinematics.VelocityAtTime(_time);
 		}
 
