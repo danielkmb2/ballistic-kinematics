@@ -36,8 +36,16 @@ public class PoolManager : MonoBehaviour {
 	}
 
 	public GameObject getObject(string poolHash) {
+		
 		ObjectPool pool = prefabPoolHash [poolHash];
-		return pool.getObject();
+		GameObject go = pool.getObject();
+
+		ReturnToPoolOverTime rtpot = go.GetComponent<ReturnToPoolOverTime> ();
+		if (rtpot != null) {
+			rtpot.reset ();
+		}
+
+		return go;
 	}
 
 	public void recycleObject(string poolHash, GameObject go) {

@@ -114,10 +114,8 @@ public class BulletBehaviour : MonoBehaviour {
 	}
 
 	public void RemoveBullet(string replacementHash) {
-		// TODO: RECYCLE IN A BULLET POOL MAYBE?
-		if (replacementHash != null) {
+		if (replacementHash != null && !"".Equals(replacementHash)) {
 			GameObject go = PoolManager.getInstance().getObject(replacementHash);
-			go.GetComponent<ReturnToPoolOverTime> ().reset ();
 			go.transform.position = bulletKinematics.PositionAtTime(_time - Time.deltaTime);
 			go.transform.rotation = transform.rotation;
 			go.GetComponent<Rigidbody>().velocity = bulletKinematics.VelocityAtTime(_time);
