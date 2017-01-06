@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BulletBehaviour : MonoBehaviour {
 
+	public string POOLTAG = "bullet";
+
 	// do we want to see the trajectory?
 	public bool debugTrajectory = true;
 
@@ -34,14 +36,14 @@ public class BulletBehaviour : MonoBehaviour {
 	public PhysicalInteractor physicalInteractor;
 
 	BulletKinematics bulletKinematics;
-	private float _time;                // time elapsed since _isActive became true
+	private float _time;                // time active
 
 	public void Awake() {
 		bulletKinematics = new BulletKinematics();	
 	}
 
 	public void StartTrajectory(Vector3 initialVelocity) {
-
+		_time = 0f;
 		collisionResolver.Initiate(this, transform.position, bulletKinematics);
 
 		physicalInteractor.Initiate(this, bulletKinematics);
@@ -62,7 +64,7 @@ public class BulletBehaviour : MonoBehaviour {
 
 	// Update the position, rotation and velocity for the current frame
 	void FixedUpdate() {
-		AdvanceTime(Time.deltaTime);
+		AdvanceTime (Time.deltaTime > 1f ? 0.01f : Time.deltaTime);
 	}
 
 	public void SetTime(float newTime) {
@@ -122,7 +124,7 @@ public class BulletBehaviour : MonoBehaviour {
 			go.GetComponent<Rigidbody>().velocity = bulletKinematics.VelocityAtTime(_time);
 		}
 
-		Destroy(gameObject);
+		PoolManager.getInstance().recycleObject(POOLTAG, gameObject);
 	}
 
 	public void InstantiateEffects(GameObject hitEffects, RaycastHit hit) {
