@@ -2,7 +2,7 @@ using UnityEngine;
 
 [System.Serializable]
 public class AmmoManager {
-	public GameObject bulletPrefab;
+	public string bulletPrefab;
 	public bool infiniteAmmo = false;
 	public bool infiniteRounds = false;
 	public int ammo = 100;
@@ -33,8 +33,7 @@ public class AmmoManager {
 		return (remainingLoadedBullets == rounds) || infiniteRounds;
 	}
 
-	public GameObject getBullet() {
-
+	public string getBullet() {
 		if (isLoaded()) {
 			if (!infiniteRounds) {
 				remainingLoadedBullets--;

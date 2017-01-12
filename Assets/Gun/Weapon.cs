@@ -74,7 +74,7 @@ public class Weapon {
 	}
 
 	private void doPrimaryFire() {
-		GameObject bulletPrefab = ammoManager.getBullet();
+		string bulletPrefab = ammoManager.getBullet();
 
 		if (bulletPrefab != null) {
 			// calculate shot properties
@@ -94,7 +94,7 @@ public class Weapon {
 }
 
 public class ShotProperties {
-	public GameObject bulletPrefab;
+	public string bulletPrefabHash;
 	public float bulletInitialPower;
 	public float dispersionAngle;
 	public int shells;
@@ -102,10 +102,10 @@ public class ShotProperties {
 	public GameObject effects;
 	public string recoilAnimation;
 
-	public ShotProperties(GameObject bulletPrefab, float bulletInitialPower, 
+	public ShotProperties(string bulletPrefabHash, float bulletInitialPower, 
 							float dispersionAngle, int shells, GameObject effects,
 							string recoilAnimation) {
-		this.bulletPrefab = bulletPrefab;
+		this.bulletPrefabHash = bulletPrefabHash;
 		this.bulletInitialPower = bulletInitialPower;
 		this.dispersionAngle = dispersionAngle;
 		this.shells = shells;

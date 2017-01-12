@@ -23,6 +23,9 @@ public class CollisionResolver {
 	private BulletKinematics bulletKinematics;
 
 	public void Initiate(BulletBehaviour bulletBehaviour, Vector3 spawnpoint, BulletKinematics bulletKinematics) {
+		this.bounces = 0;
+		this.previousPos = spawnpoint;
+
 		this.bulletBehaviour = bulletBehaviour;
 		this.spawnpoint = spawnpoint;
 		this.bulletKinematics = bulletKinematics;

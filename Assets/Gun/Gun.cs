@@ -47,10 +47,9 @@ public class Gun : MonoBehaviour {
 
 		for (int i = 0; i < shotProperties.shells; i++) {
 			// instantiate bullet
-			GameObject bullet = (GameObject)Instantiate(
-				shotProperties.bulletPrefab,
-				spawnPoint.transform.position,
-				spawnPoint.transform.rotation);
+			GameObject bullet = PoolManager.getInstance ().getObject (shotProperties.bulletPrefabHash);
+			bullet.transform.position = spawnPoint.transform.position;
+			bullet.transform.rotation = spawnPoint.transform.rotation;
 
 			Vector3 shotDirection = spawnPoint.forward;
 			shotDirection += new Vector3(
@@ -59,7 +58,9 @@ public class Gun : MonoBehaviour {
 				Random.Range(-shotProperties.dispersionAngle / 2, shotProperties.dispersionAngle / 2));
 
 			// set bulletbehaviour properties
-			bullet.GetComponent<BulletBehaviour>().StartTrajectory(shotDirection * shotProperties.bulletInitialPower);
+			BulletBehaviour bb = bullet.GetComponent<BulletBehaviour>();
+			bb.POOLTAG = shotProperties.bulletPrefabHash;
+			bb.StartTrajectory(shotDirection * shotProperties.bulletInitialPower);
 		}
 
 		if (shotProperties.effects != null) {
