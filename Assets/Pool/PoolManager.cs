@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,14 +17,9 @@ public class PoolManager : MonoBehaviour {
 	private static PoolManager instance = null;
 
 	public static PoolManager getInstance() {
-		if (instance == null) {
-			instance = new PoolManager ();
-			return instance;
-		} else {
-			return instance;
-		}
+		return instance;
 	}
-		
+
 	void Awake () {
 		instance = this;
 
